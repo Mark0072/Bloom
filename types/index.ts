@@ -164,13 +164,21 @@ export interface StoreProduct {
 }
 
 export interface BasketLine {
+  /** Stable composite identity — a normal, rescue, and bundle line for the same SKU never collide. */
+  id: string;
   sku: string;
   quantity: number;
   unitPrice: number;
+  /** Regular (non-discounted) unit price, used to compute savings without re-querying the catalog. */
+  regularUnitPrice: number;
   isRescue: boolean;
   isBundle: boolean;
   bundleId?: string;
   reason?: string;
+  /** Human-readable portion/coverage explanation, e.g. "2 unidades para cubrir aproximadamente 4 porciones". */
+  coverageNote?: string;
+  /** True for lines the customer added themselves (catalog or search) — kept across a basket regeneration. */
+  manuallyAdded?: boolean;
 }
 
 export interface BasketFormInput {
@@ -202,13 +210,9 @@ export interface ShoppingRoute {
   stops: RouteStop[];
 }
 
-export type AssistanceType =
-  | "preparar_carrito"
-  | "acompanar_cliente"
-  | "llevar_compra_caja"
-  | "apoyo_movilidad";
+export type AssistanceType = "movilidad" | "visual" | "otro";
 
-export type AssistanceStatus = "pendiente" | "en_proceso" | "completada";
+export type AssistanceStatus = "activa" | "completada";
 
 export interface AssistanceRequest {
   id: string;
@@ -216,6 +220,35 @@ export interface AssistanceRequest {
   type: AssistanceType;
   status: AssistanceStatus;
   createdAt: string;
+}
+
+/**
+ * Independent accessibility dimensions — never collapsed into one "accessible mode" flag,
+ * so a color-blindness filter, high contrast, large text, and read-aloud can each be toggled on their own.
+ */
+export type ColorProfile = "none" | "protanopia" | "deuteranopia" | "tritanopia" | "grayscale";
+
+export interface AccessibilitySettings {
+  colorProfile: ColorProfile;
+  highContrast: boolean;
+  largeText: boolean;
+  readAloud: boolean;
+}
+
+export type ToastTone = "success" | "error" | "info";
+
+export interface Toast {
+  id: string;
+  message: string;
+  tone: ToastTone;
+}
+
+export interface ProductFilters {
+  query: string;
+  category: string;
+  onlyAvailable: boolean;
+  onlyPromo: boolean;
+  onlyRescue: boolean;
 }
 
 export interface Ticket {

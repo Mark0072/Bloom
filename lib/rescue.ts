@@ -1,6 +1,6 @@
 import { getRescuePolicy, getStoreProducts, getStoreProduct, getManualBundles as getManualBundlesFromData, getManualBundle } from "@/lib/products";
 import { round2 } from "@/lib/money";
-import type { BasketLine, ManualBundle, StoreId, StoreProduct } from "@/types";
+import type { BasketLine, Language, ManualBundle, StoreId, StoreProduct } from "@/types";
 
 export interface RescueOffer extends StoreProduct {
   rescuePrice: number;
@@ -64,14 +64,16 @@ export function getManualBundles(storeId: StoreId): ManualBundle[] {
   return getManualBundlesFromData(storeId);
 }
 
-export function addRescueItemToBasket(product: RescueOffer, quantity = 1): BasketLine {
+export function addRescueItemToBasket(product: RescueOffer, quantity = 1, language: Language = "es"): BasketLine {
   return {
+    id: `${product.sku}::rescue`,
     sku: product.sku,
-    quantity,
+    quantity: Math.max(1, Math.min(quantity, product.stock)),
     unitPrice: product.rescuePrice,
+    regularUnitPrice: product.price,
     isRescue: true,
     isBundle: false,
-    reason: "Oferta de Rescate aceptada por el cliente.",
+    reason: language === "en" ? "Rescue Offer accepted by the customer." : "Oferta de Rescate aceptada por el cliente.",
   };
 }
 
@@ -136,18 +138,20 @@ export function calculateBundlePrice(
   return { total, savings: round2(regularTotal - total), unitPrices, unitCounts };
 }
 
-export function addBundleToBasket(bundle: ManualBundle, storeId: StoreId): BasketLine[] {
+export function addBundleToBasket(bundle: ManualBundle, storeId: StoreId, language: Language = "es"): BasketLine[] {
   const { total, unitPrices, unitCounts } = calculateBundlePrice(bundle, storeId);
   const regularTotal = Object.entries(unitCounts).reduce((sum, [sku, count]) => sum + (unitPrices[sku] ?? 0) * count, 0);
   const scaleFactor = regularTotal > 0 ? total / regularTotal : 1;
 
   return Object.entries(unitCounts).map(([sku, quantity]) => ({
+    id: `${sku}::bundle::${bundle.bundleId}`,
     sku,
     quantity,
     unitPrice: round2((unitPrices[sku] ?? 0) * scaleFactor),
+    regularUnitPrice: unitPrices[sku] ?? 0,
     isRescue: false,
     isBundle: true,
     bundleId: bundle.bundleId,
-    reason: `Incluido en bundle: ${bundle.name}`,
+    reason: language === "en" ? `Included in combo: ${bundle.name}` : `Incluido en bundle: ${bundle.name}`,
   }));
 }

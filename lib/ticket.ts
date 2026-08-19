@@ -101,28 +101,31 @@ export function decodeTicket(encoded: string): Ticket | null {
     const slim = JSON.parse(json) as SlimTicket;
     const store = getStore(slim.s);
 
-    const lines: BasketLine[] = slim.l.map((line) => ({
-      sku: line.sku,
-      quantity: line.q,
-      unitPrice: line.p,
-      isRescue: !!line.r,
-      isBundle: !!line.b,
-      bundleId: line.b,
-    }));
-
     const productNames: Record<string, string> = {};
     let total = 0;
     let rescueSavings = 0;
-    for (const line of lines) {
+
+    const lines: BasketLine[] = slim.l.map((line) => {
       const product = getStoreProduct(slim.s, line.sku);
+      const kind = line.r ? "rescue" : line.b ? `bundle::${line.b}` : "normal";
       if (product) {
         productNames[line.sku] = product.name;
-        if (line.isRescue) {
-          rescueSavings = round2(rescueSavings + (product.price - line.unitPrice) * line.quantity);
+        if (line.r) {
+          rescueSavings = round2(rescueSavings + (product.price - line.p) * line.q);
         }
       }
-      total = round2(total + line.unitPrice * line.quantity);
-    }
+      total = round2(total + line.p * line.q);
+      return {
+        id: `${line.sku}::${kind}`,
+        sku: line.sku,
+        quantity: line.q,
+        unitPrice: line.p,
+        regularUnitPrice: product?.price ?? line.p,
+        isRescue: !!line.r,
+        isBundle: !!line.b,
+        bundleId: line.b,
+      };
+    });
 
     const bundleIds = Array.from(
       new Set(lines.filter((l) => l.isBundle && l.bundleId).map((l) => l.bundleId as string))

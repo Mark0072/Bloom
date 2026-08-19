@@ -2,6 +2,38 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --bloom-bg: #f0fdf4;
+  --bloom-surface: #ffffff;
+  --bloom-surface-alt: #ecfdf5;
+  --bloom-text: #0f172a;
+  --bloom-text-muted: #475569;
+  --bloom-border: #e2e8f0;
+  --bloom-accent: #16a34a;
+  --bloom-accent-text: #ffffff;
+  --bloom-danger: #dc2626;
+  --bloom-danger-bg: #fee2e2;
+  --bloom-warning: #b45309;
+  --bloom-warning-bg: #fef3c7;
+
+  --bloom-text-size: 1;
+}
+
+[data-contrast="high"] {
+  --bloom-bg: #000000;
+  --bloom-surface: #000000;
+  --bloom-surface-alt: #111111;
+  --bloom-text: #ffffff;
+  --bloom-text-muted: #e5e5e5;
+  --bloom-border: #ffffff;
+  --bloom-accent: #ffd400;
+  --bloom-accent-text: #000000;
+  --bloom-danger: #ff8080;
+  --bloom-danger-bg: #3a0000;
+  --bloom-warning: #ffd400;
+  --bloom-warning-bg: #332900;
+}
+
 html,
 body {
   height: 100%;
@@ -9,6 +41,13 @@ body {
 
 body {
   -webkit-tap-highlight-color: transparent;
+  background: var(--bloom-bg);
+  color: var(--bloom-text);
+  font-size: calc(1rem * var(--bloom-text-size));
+}
+
+[data-textsize="large"] {
+  --bloom-text-size: 1.2;
 }
 
 input,
@@ -16,4 +55,49 @@ select,
 textarea,
 button {
   font-family: inherit;
+}
+
+@layer components {
+  .bloom-page {
+    background: var(--bloom-bg);
+    color: var(--bloom-text);
+  }
+  .bloom-card {
+    background: var(--bloom-surface);
+    color: var(--bloom-text);
+    border: 1px solid var(--bloom-border);
+  }
+  .bloom-card-alt {
+    background: var(--bloom-surface-alt);
+    color: var(--bloom-text);
+    border: 1px solid var(--bloom-border);
+  }
+  .bloom-muted {
+    color: var(--bloom-text-muted);
+  }
+  .bloom-border {
+    border-color: var(--bloom-border);
+  }
+  .bloom-btn-primary {
+    background: var(--bloom-accent);
+    color: var(--bloom-accent-text);
+    font-weight: 700;
+  }
+  .bloom-btn-secondary {
+    background: var(--bloom-surface);
+    color: var(--bloom-text);
+    border: 2px solid var(--bloom-border);
+    font-weight: 700;
+  }
+  .bloom-danger-text {
+    color: var(--bloom-danger);
+  }
+  .bloom-warning-text {
+    color: var(--bloom-warning);
+  }
+}
+
+/* Never let a color-blindness/grayscale filter distort a QR code enough to break scanning. */
+.qr-safe {
+  filter: none !important;
 }

@@ -18,9 +18,11 @@ export default function QRCodeTicket({ url }: { url: string }) {
   }
 
   return (
-    <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white p-5">
+    // Intentionally a fixed white/black card, never themed — a QR code needs maximum contrast to scan
+    // reliably, and qr-safe guarantees no active color-blindness/grayscale filter reaches it either.
+    <div className="qr-safe flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white p-5">
       <QRCodeSVG value={url} size={200} level="L" includeMargin />
-      <p className="break-all text-center text-xs opacity-60">{url}</p>
+      <p className="break-all text-center text-xs text-slate-600">{url}</p>
     </div>
   );
 }

@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import KioskShell from "@/components/KioskShell";
-import StoreHeader from "@/components/StoreHeader";
+import AppShell from "@/components/AppShell";
 import StepNav from "@/components/StepNav";
 import { getBasketOptions } from "@/lib/products";
 import { generateBasket } from "@/lib/basket";
@@ -51,16 +50,14 @@ export default function BasketStartPage() {
     const form = { budget: budgetNumber, people, basketType, preferences, restrictions, allergies };
     setBasketForm(form);
 
-    const result = generateBasket(form, storeId);
+    const result = generateBasket(form, storeId, language);
     setLines(result.lines, result.explanations, result.savings);
 
     return true;
   }
 
   return (
-    <KioskShell>
-      <StoreHeader title={t("basketStartTitle", language)} />
-
+    <AppShell title={t("basketStartTitle", language)}>
       <div className="flex flex-col gap-5 overflow-y-auto pb-4">
         <div>
           <label className="mb-1 block font-semibold">{t("budgetLabel", language)}</label>
@@ -71,7 +68,7 @@ export default function BasketStartPage() {
             value={budget}
             onChange={(e) => setBudget(e.target.value)}
             placeholder="2500"
-            className="w-full rounded-xl border-2 border-slate-300 px-4 py-3 text-kiosk-base"
+            className="bloom-card w-full rounded-xl px-4 py-3 text-kiosk-base"
           />
         </div>
 
@@ -80,16 +77,16 @@ export default function BasketStartPage() {
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => setPeople(Math.max(1, people - 1))}
-              className="h-12 w-12 rounded-xl border-2 border-slate-300 text-xl font-bold"
+              onClick={() => setPeople((p) => Math.max(1, p - 1))}
+              className="bloom-btn-secondary h-12 w-12 rounded-xl text-xl"
             >
               −
             </button>
             <span className="w-10 text-center text-kiosk-base font-bold">{people}</span>
             <button
               type="button"
-              onClick={() => setPeople(people + 1)}
-              className="h-12 w-12 rounded-xl border-2 border-slate-300 text-xl font-bold"
+              onClick={() => setPeople((p) => p + 1)}
+              className="bloom-btn-secondary h-12 w-12 rounded-xl text-xl"
             >
               +
             </button>
@@ -105,7 +102,7 @@ export default function BasketStartPage() {
                 type="button"
                 onClick={() => setBasketType(option.id)}
                 className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                  basketType === option.id ? "bg-brand-600 text-white" : "bg-white border border-slate-300"
+                  basketType === option.id ? "bloom-btn-primary" : "bloom-btn-secondary"
                 }`}
               >
                 {option.label}
@@ -123,7 +120,7 @@ export default function BasketStartPage() {
                 type="button"
                 onClick={() => setPreferences(toggleInArray(preferences, option.id))}
                 className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                  preferences.includes(option.id) ? "bg-brand-600 text-white" : "bg-white border border-slate-300"
+                  preferences.includes(option.id) ? "bloom-btn-primary" : "bloom-btn-secondary"
                 }`}
               >
                 {option.label}
@@ -141,7 +138,7 @@ export default function BasketStartPage() {
                 type="button"
                 onClick={() => setRestrictions(toggleInArray(restrictions, option.id))}
                 className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                  restrictions.includes(option.id) ? "bg-brand-600 text-white" : "bg-white border border-slate-300"
+                  restrictions.includes(option.id) ? "bloom-btn-primary" : "bloom-btn-secondary"
                 }`}
               >
                 {option.label}
@@ -159,7 +156,7 @@ export default function BasketStartPage() {
                 type="button"
                 onClick={() => setAllergies(toggleInArray(allergies, option.id))}
                 className={`rounded-full px-4 py-2 text-sm font-semibold ${
-                  allergies.includes(option.id) ? "bg-brand-600 text-white" : "bg-white border border-slate-300"
+                  allergies.includes(option.id) ? "bloom-btn-primary" : "bloom-btn-secondary"
                 }`}
               >
                 {option.label}
@@ -168,10 +165,10 @@ export default function BasketStartPage() {
           </div>
         </div>
 
-        {error && <p className="font-semibold text-red-600">{error}</p>}
+        {error && <p className="font-semibold bloom-danger-text">{error}</p>}
       </div>
 
-      <StepNav backHref="/home" nextHref="/basket/result" nextLabel={t("generateBasket", language)} onNext={handleGenerate} />
-    </KioskShell>
+      <StepNav nextHref="/basket/result" nextLabel={t("generateBasket", language)} onNext={handleGenerate} />
+    </AppShell>
   );
 }

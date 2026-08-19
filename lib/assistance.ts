@@ -1,4 +1,4 @@
-import type { AssistanceRequest, AssistanceStatus, AssistanceType, StoreId } from "@/types";
+import type { AssistanceRequest, AssistanceStatus, AssistanceType, Language, StoreId } from "@/types";
 
 const STORAGE_KEY = "bloom_assistance_requests";
 
@@ -22,7 +22,7 @@ export function createAssistanceRequest(data: { storeId: StoreId; type: Assistan
     id: `AST-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
     storeId: data.storeId,
     type: data.type,
-    status: "pendiente",
+    status: "activa",
     createdAt: new Date().toISOString(),
   };
   const all = readAll();
@@ -44,15 +44,34 @@ export function updateAssistanceStatus(id: string, status: AssistanceStatus): As
   return all[idx];
 }
 
-export const ASSISTANCE_TYPE_LABELS: Record<AssistanceType, string> = {
-  preparar_carrito: "Preparar carrito",
-  acompanar_cliente: "Acompañar al cliente",
-  llevar_compra_caja: "Llevar compra a caja",
-  apoyo_movilidad: "Apoyo por movilidad reducida",
+const TYPE_LABELS: Record<Language, Record<AssistanceType, string>> = {
+  es: {
+    movilidad: "Ayuda para moverse",
+    visual: "No puede ver bien",
+    otro: "Otro tipo de asistencia",
+  },
+  en: {
+    movilidad: "Help moving around",
+    visual: "Can't see well",
+    otro: "Other kind of assistance",
+  },
 };
 
-export const ASSISTANCE_STATUS_LABELS: Record<AssistanceStatus, string> = {
-  pendiente: "Pendiente",
-  en_proceso: "En proceso",
-  completada: "Completada",
+const STATUS_LABELS: Record<Language, Record<AssistanceStatus, string>> = {
+  es: {
+    activa: "Activa",
+    completada: "Completada",
+  },
+  en: {
+    activa: "Active",
+    completada: "Completed",
+  },
 };
+
+export function getAssistanceTypeLabel(type: AssistanceType, language: Language = "es"): string {
+  return TYPE_LABELS[language][type];
+}
+
+export function getAssistanceStatusLabel(status: AssistanceStatus, language: Language = "es"): string {
+  return STATUS_LABELS[language][status];
+}

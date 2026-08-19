@@ -33,7 +33,7 @@ export default function LanguagePage() {
           <button
             type="button"
             onClick={() => handleSelect("es")}
-            className="flex items-center gap-4 rounded-3xl bg-white p-6 text-left shadow-lg border-2 border-brand-600 active:scale-[0.98]"
+            className="bloom-card flex items-center gap-4 rounded-3xl p-6 text-left shadow-lg border-2 active:scale-[0.98]"
           >
             <span className="text-4xl">🇩🇴</span>
             <p className="text-kiosk-lg font-extrabold">Español</p>
@@ -41,7 +41,7 @@ export default function LanguagePage() {
           <button
             type="button"
             onClick={() => handleSelect("en")}
-            className="flex items-center gap-4 rounded-3xl bg-white p-6 text-left shadow-lg border-2 border-slate-300 active:scale-[0.98]"
+            className="bloom-card flex items-center gap-4 rounded-3xl p-6 text-left shadow-lg border-2 active:scale-[0.98]"
           >
             <span className="text-4xl">🇺🇸</span>
             <p className="text-kiosk-lg font-extrabold">English</p>

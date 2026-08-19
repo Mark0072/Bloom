@@ -239,20 +239,12 @@
         "label": "Ahorro máximo"
       },
       {
-        "id": "mas_cantidad",
-        "label": "Más cantidad"
-      },
-      {
         "id": "marcas_conocidas",
         "label": "Marcas conocidas"
       },
       {
         "id": "compra_balanceada",
         "label": "Compra balanceada"
-      },
-      {
-        "id": "marcas_grupo_ramos",
-        "label": "Priorizar Wala/Zerca"
       }
     ],
     "restrictions": [

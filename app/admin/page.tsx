@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { formatMoney, round2 } from "@/lib/money";
 import { getAllProducts, getManualBundle, getStore } from "@/lib/products";
-import { getAssistanceRequests, ASSISTANCE_STATUS_LABELS, ASSISTANCE_TYPE_LABELS } from "@/lib/assistance";
+import { getAssistanceRequests, getAssistanceStatusLabel, getAssistanceTypeLabel } from "@/lib/assistance";
 import { useBloomStore } from "@/store/useBloomStore";
 import type { AssistanceRequest } from "@/types";
 
@@ -71,8 +71,8 @@ export default function AdminPage() {
           <ul className="flex flex-col gap-2">
             {assistanceRequests.map((r) => (
               <li key={r.id} className="flex items-center justify-between text-sm">
-                <span>{ASSISTANCE_TYPE_LABELS[r.type]}</span>
-                <span className="opacity-60">{ASSISTANCE_STATUS_LABELS[r.status]}</span>
+                <span>{getAssistanceTypeLabel(r.type)}</span>
+                <span className="opacity-60">{getAssistanceStatusLabel(r.status)}</span>
               </li>
             ))}
           </ul>

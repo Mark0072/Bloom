@@ -2,8 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import KioskShell from "@/components/KioskShell";
-import StoreHeader from "@/components/StoreHeader";
+import AppShell from "@/components/AppShell";
 import StepNav from "@/components/StepNav";
 import QRCodeTicket from "@/components/QRCodeTicket";
 import { formatMoney } from "@/lib/money";
@@ -24,30 +23,28 @@ export default function TicketPage() {
   }, [hasHydrated, storeId, router]);
 
   useEffect(() => {
-    if (ticket && typeof window !== "undefined") {
+    if (ticket && ticket.lines.length > 0 && typeof window !== "undefined") {
       const encoded = encodeTicket(ticket);
       setTicketUrl(`${window.location.origin}/ticket/view?data=${encoded}`);
     }
   }, [ticket]);
 
   useEffect(() => {
-    if (hasHydrated && !ticket) router.replace("/checkout");
+    if (hasHydrated && (!ticket || ticket.lines.length === 0)) router.replace("/checkout");
   }, [hasHydrated, ticket, router]);
 
-  if (!hasHydrated || !storeId || !ticket) return null;
+  if (!hasHydrated || !storeId || !ticket || ticket.lines.length === 0) return null;
 
   return (
-    <KioskShell>
-      <StoreHeader title={t("ticketTitle", language)} />
-
+    <AppShell title={t("ticketTitle", language)}>
       <div className="flex flex-col gap-4 overflow-y-auto pb-4">
-        <div className="rounded-2xl border border-slate-200 bg-white p-4">
-          <p className="text-xs opacity-60">Código de ticket</p>
+        <div className="bloom-card rounded-2xl p-4">
+          <p className="text-xs bloom-muted">{language === "en" ? "Ticket code" : "Código de ticket"}</p>
           <p className="font-mono font-bold">{ticket.ticketCode}</p>
-          <p className="mt-2 text-xs opacity-60">{new Date(ticket.createdAt).toLocaleString("es-DO")}</p>
+          <p className="mt-2 text-xs bloom-muted">{new Date(ticket.createdAt).toLocaleString(language === "en" ? "en-US" : "es-DO")}</p>
         </div>
 
-        <div className="rounded-2xl border border-slate-200 bg-white p-4">
+        <div className="bloom-card rounded-2xl p-4">
           <ul className="flex flex-col gap-1 text-sm">
             {ticket.lines.map((line, i) => (
               <li key={i} className="flex justify-between">
@@ -58,20 +55,20 @@ export default function TicketPage() {
               </li>
             ))}
           </ul>
-          <div className="mt-3 border-t border-slate-200 pt-3 flex flex-col gap-1 text-sm">
+          <div className="mt-3 border-t bloom-border pt-3 flex flex-col gap-1 text-sm">
             <div className="flex justify-between font-bold text-kiosk-sm">
               <span>{t("total", language)}</span>
               <span>{formatMoney(ticket.total)}</span>
             </div>
             {ticket.promoSavings > 0 && (
-              <div className="flex justify-between text-brand-700">
-                <span>Ahorro por promociones</span>
+              <div className="flex justify-between">
+                <span>{t("savings", language)}</span>
                 <span>-{formatMoney(ticket.promoSavings)}</span>
               </div>
             )}
             {ticket.rescueSavings > 0 && (
-              <div className="flex justify-between text-rescue-700">
-                <span>Ahorro por Ofertas de Rescate</span>
+              <div className="flex justify-between text-[var(--bloom-warning)]">
+                <span>{language === "en" ? "Rescue Offer savings" : "Ahorro por Ofertas de Rescate"}</span>
                 <span>-{formatMoney(ticket.rescueSavings)}</span>
               </div>
             )}
@@ -80,12 +77,10 @@ export default function TicketPage() {
 
         {ticketUrl && <QRCodeTicket url={ticketUrl} />}
 
-        <p className="rounded-xl bg-amber-50 p-3 text-center text-xs font-medium text-amber-800">
-          {t("ticketDisclaimer", language)}
-        </p>
+        <p className="bloom-card-alt rounded-xl p-3 text-center text-xs font-medium">{t("ticketDisclaimer", language)}</p>
       </div>
 
-      <StepNav backHref="/checkout" nextHref="/thanks" />
-    </KioskShell>
+      <StepNav fallbackHref="/checkout" nextHref="/thanks" />
+    </AppShell>
   );
 }

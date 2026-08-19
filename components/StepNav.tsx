@@ -5,16 +5,26 @@ import { useBloomStore } from "@/store/useBloomStore";
 import { t } from "@/lib/i18n";
 
 interface StepNavProps {
-  backHref?: string;
+  /** Used only when there's no browser history to go back to (e.g. the screen was opened directly). */
+  fallbackHref?: string;
+  showBack?: boolean;
   nextHref?: string;
   nextLabel?: string;
   onNext?: () => boolean | void;
   nextDisabled?: boolean;
 }
 
-export default function StepNav({ backHref, nextHref, nextLabel, onNext, nextDisabled }: StepNavProps) {
+export default function StepNav({ fallbackHref = "/home", showBack = true, nextHref, nextLabel, onNext, nextDisabled }: StepNavProps) {
   const router = useRouter();
   const language = useBloomStore((s) => s.language);
+
+  function handleBack() {
+    if (typeof window !== "undefined" && window.history.length > 1) {
+      router.back();
+    } else {
+      router.push(fallbackHref);
+    }
+  }
 
   function handleNext() {
     const result = onNext ? onNext() : true;
@@ -24,11 +34,11 @@ export default function StepNav({ backHref, nextHref, nextLabel, onNext, nextDis
 
   return (
     <div className="mt-auto flex gap-3 pt-4">
-      {backHref && (
+      {showBack && (
         <button
           type="button"
-          onClick={() => router.push(backHref)}
-          className="flex-1 rounded-2xl border-2 border-slate-300 bg-white py-4 text-kiosk-base font-semibold text-slate-700 active:scale-[0.98]"
+          onClick={handleBack}
+          className="bloom-btn-secondary flex-1 rounded-2xl py-4 text-kiosk-base active:scale-[0.98]"
         >
           {t("back", language)}
         </button>
@@ -38,7 +48,7 @@ export default function StepNav({ backHref, nextHref, nextLabel, onNext, nextDis
           type="button"
           disabled={nextDisabled}
           onClick={handleNext}
-          className="flex-[2] rounded-2xl bg-brand-600 py-4 text-kiosk-base font-bold text-white shadow-md active:scale-[0.98] disabled:opacity-40"
+          className="bloom-btn-primary flex-[2] rounded-2xl py-4 text-kiosk-base shadow-md active:scale-[0.98] disabled:opacity-40"
         >
           {nextLabel ?? t("next", language)}
         </button>
