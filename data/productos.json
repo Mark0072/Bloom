@@ -1,0 +1,3206 @@
+{
+  "metadata": {
+    "projectName": "Bloom",
+    "generatedFor": "AlphaRamos Week PoC",
+    "generatedAt": "2026-08-19",
+    "currency": "DOP",
+    "importantNote": "Dataset simulado para PoC. Los precios de Wala, Zerca y algunas marcas se basan en referencias públicas de Sirena.do cuando están disponibles; el resto son aproximaciones realistas y deben validarse antes de cualquier piloto.",
+    "intendedUse": [
+      "canasta_dinamica",
+      "consulta_productos_disponibilidad",
+      "ofertas_rescate",
+      "ruta_compra",
+      "ticket_qr",
+      "asistencia_simulada"
+    ]
+  },
+  "stores": [
+    {
+      "storeId": "APZ-001",
+      "internalProductName": "Bloom Aprezio",
+      "publicDisplayName": "Aprezio",
+      "format": "hard_discount",
+      "branchName": "Aprezio Los Mina - PoC",
+      "currency": "DOP",
+      "inventoryMode": "simulated_sap_inventory",
+      "priceTierNote": "Precios PoC ligeramente ajustados para formato hard discount; no son precios oficiales.",
+      "terminal": {
+        "primaryUse": "tablet_kiosk_portrait",
+        "screenOrientation": "portrait",
+        "flow": [
+          "inicio",
+          "idioma",
+          "vistas",
+          "ticket_qr",
+          "agradecimiento",
+          "reinicio"
+        ],
+        "supportsPWA": true
+      },
+      "layout": {
+        "layoutId": "APZ-LOS-MINA-LAYOUT-POC",
+        "entryZoneId": "ENTRADA",
+        "checkoutZoneId": "CAJA",
+        "zones": [
+          {
+            "zoneId": "ENTRADA",
+            "label": "Entrada",
+            "order": 0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "zoneId": "Z01",
+            "label": "Promociones y ahorro",
+            "order": 1,
+            "x": 1,
+            "y": 0
+          },
+          {
+            "zoneId": "Z02",
+            "label": "Despensa básica",
+            "order": 2,
+            "x": 1,
+            "y": 1
+          },
+          {
+            "zoneId": "Z03",
+            "label": "Lácteos y huevos",
+            "order": 3,
+            "x": 2,
+            "y": 1
+          },
+          {
+            "zoneId": "Z04",
+            "label": "Frescos y vegetales",
+            "order": 4,
+            "x": 3,
+            "y": 1
+          },
+          {
+            "zoneId": "Z05",
+            "label": "Carnes y pescados",
+            "order": 5,
+            "x": 4,
+            "y": 1
+          },
+          {
+            "zoneId": "Z06",
+            "label": "Higiene y limpieza",
+            "order": 6,
+            "x": 2,
+            "y": 2
+          },
+          {
+            "zoneId": "Z07",
+            "label": "Panadería y comida rápida",
+            "order": 7,
+            "x": 3,
+            "y": 2
+          },
+          {
+            "zoneId": "CAJA",
+            "label": "Caja",
+            "order": 8,
+            "x": 4,
+            "y": 2
+          }
+        ]
+      }
+    },
+    {
+      "storeId": "SIR-001",
+      "internalProductName": "Bloom Sirena",
+      "publicDisplayName": "Sirena",
+      "format": "supermarket_hypermarket",
+      "branchName": "Sirena Churchill - PoC",
+      "currency": "DOP",
+      "inventoryMode": "simulated_sap_inventory",
+      "priceTierNote": "Precios PoC basados en referencias públicas de Sirena.do cuando están disponibles y aproximaciones cuando no.",
+      "terminal": {
+        "primaryUse": "kiosk_portrait",
+        "screenOrientation": "portrait",
+        "flow": [
+          "inicio",
+          "idioma",
+          "vistas",
+          "ticket_qr",
+          "agradecimiento",
+          "reinicio"
+        ],
+        "supportsPWA": true
+      },
+      "layout": {
+        "layoutId": "SIR-CHURCHILL-LAYOUT-POC",
+        "entryZoneId": "ENTRADA",
+        "checkoutZoneId": "CAJA",
+        "zones": [
+          {
+            "zoneId": "ENTRADA",
+            "label": "Entrada / servicio",
+            "order": 0,
+            "x": 0,
+            "y": 0
+          },
+          {
+            "zoneId": "Z01",
+            "label": "Promociones",
+            "order": 1,
+            "x": 1,
+            "y": 0
+          },
+          {
+            "zoneId": "Z02",
+            "label": "Despensa",
+            "order": 2,
+            "x": 1,
+            "y": 1
+          },
+          {
+            "zoneId": "Z03",
+            "label": "Lácteos y huevos",
+            "order": 3,
+            "x": 2,
+            "y": 1
+          },
+          {
+            "zoneId": "Z04",
+            "label": "Frutas y vegetales",
+            "order": 4,
+            "x": 3,
+            "y": 1
+          },
+          {
+            "zoneId": "Z05",
+            "label": "Carnes, pescados y mariscos",
+            "order": 5,
+            "x": 4,
+            "y": 1
+          },
+          {
+            "zoneId": "Z06",
+            "label": "Higiene, limpieza y desechables",
+            "order": 6,
+            "x": 2,
+            "y": 2
+          },
+          {
+            "zoneId": "Z07",
+            "label": "Panadería / comida preparada",
+            "order": 7,
+            "x": 3,
+            "y": 2
+          },
+          {
+            "zoneId": "CAJA",
+            "label": "Caja",
+            "order": 8,
+            "x": 4,
+            "y": 2
+          }
+        ]
+      }
+    }
+  ],
+  "basketOptions": {
+    "basketTypes": [
+      {
+        "id": "compra_basica",
+        "label": "Compra básica"
+      },
+      {
+        "id": "desayuno",
+        "label": "Desayuno"
+      },
+      {
+        "id": "higiene",
+        "label": "Higiene"
+      },
+      {
+        "id": "lonchera_escolar",
+        "label": "Lonchera escolar"
+      },
+      {
+        "id": "comida_semanal",
+        "label": "Comida semanal"
+      },
+      {
+        "id": "adulto_mayor",
+        "label": "Adulto mayor"
+      },
+      {
+        "id": "emergencia",
+        "label": "Emergencia"
+      }
+    ],
+    "preferences": [
+      {
+        "id": "ahorro_maximo",
+        "label": "Ahorro máximo"
+      },
+      {
+        "id": "mas_cantidad",
+        "label": "Más cantidad"
+      },
+      {
+        "id": "marcas_conocidas",
+        "label": "Marcas conocidas"
+      },
+      {
+        "id": "compra_balanceada",
+        "label": "Compra balanceada"
+      },
+      {
+        "id": "marcas_grupo_ramos",
+        "label": "Priorizar Wala/Zerca"
+      }
+    ],
+    "restrictions": [
+      {
+        "id": "sin_azucar",
+        "label": "Sin azúcar"
+      },
+      {
+        "id": "bajo_sodio",
+        "label": "Bajo sodio"
+      },
+      {
+        "id": "sin_cerdo",
+        "label": "Sin cerdo"
+      },
+      {
+        "id": "productos_ninos",
+        "label": "Productos para niños"
+      },
+      {
+        "id": "productos_adulto_mayor",
+        "label": "Productos para adultos mayores"
+      }
+    ],
+    "allergies": [
+      {
+        "id": "leche",
+        "label": "Leche/lácteos"
+      },
+      {
+        "id": "huevo",
+        "label": "Huevo"
+      },
+      {
+        "id": "gluten",
+        "label": "Gluten"
+      },
+      {
+        "id": "pescado",
+        "label": "Pescado"
+      },
+      {
+        "id": "mariscos",
+        "label": "Mariscos"
+      }
+    ]
+  },
+  "rescuePolicy": {
+    "policyId": "RESCUE-US-STYLE-POC",
+    "description": "Política centralizada PoC inspirada en prácticas de markdown dinámico en supermercados: 30%-50% al acercarse a la fecha límite y hasta 75% si debe salir el mismo día.",
+    "rules": [
+      {
+        "perishableClass": "prepared_food",
+        "displayName": "Comida preparada",
+        "maxShelfLifeDays": 1,
+        "discountTiers": [
+          {
+            "daysRemainingMax": 0,
+            "discountPercent": 75
+          },
+          {
+            "daysRemainingMax": 1,
+            "discountPercent": 50
+          }
+        ]
+      },
+      {
+        "perishableClass": "raw_meat_fish",
+        "displayName": "Carnes y pescados crudos",
+        "maxShelfLifeDays": 3,
+        "discountTiers": [
+          {
+            "daysRemainingMax": 0,
+            "discountPercent": 75
+          },
+          {
+            "daysRemainingMax": 1,
+            "discountPercent": 50
+          },
+          {
+            "daysRemainingMax": 2,
+            "discountPercent": 30
+          }
+        ]
+      },
+      {
+        "perishableClass": "fresh_produce",
+        "displayName": "Frutas y vegetales",
+        "maxShelfLifeDays": 10,
+        "discountTiers": [
+          {
+            "daysRemainingMax": 0,
+            "discountPercent": 75
+          },
+          {
+            "daysRemainingMax": 2,
+            "discountPercent": 50
+          },
+          {
+            "daysRemainingMax": 4,
+            "discountPercent": 30
+          }
+        ]
+      },
+      {
+        "perishableClass": "fresh_dairy",
+        "displayName": "Lácteos frescos",
+        "maxShelfLifeDays": 7,
+        "discountTiers": [
+          {
+            "daysRemainingMax": 0,
+            "discountPercent": 75
+          },
+          {
+            "daysRemainingMax": 2,
+            "discountPercent": 50
+          },
+          {
+            "daysRemainingMax": 4,
+            "discountPercent": 30
+          }
+        ]
+      },
+      {
+        "perishableClass": "bakery",
+        "displayName": "Panadería",
+        "maxShelfLifeDays": 2,
+        "discountTiers": [
+          {
+            "daysRemainingMax": 0,
+            "discountPercent": 75
+          },
+          {
+            "daysRemainingMax": 1,
+            "discountPercent": 50
+          }
+        ]
+      }
+    ],
+    "safetyGuardrails": [
+      "Solo productos aptos para consumo pueden aparecer como Oferta de Rescate.",
+      "El PoC no aplica descuentos reales en caja; genera una recomendación y un ticket demostrativo.",
+      "Los bundles son configurados manualmente; no se generan automáticamente por IA.",
+      "El cliente debe poder aceptar o rechazar ofertas de rescate de forma explícita."
+    ]
+  },
+  "manualBundles": [
+    {
+      "bundleId": "BND-APZ-MANZANA-2X1",
+      "storeId": "APZ-001",
+      "name": "2x1 Manzanas rojas - Ahorro de Última Oportunidad",
+      "description": "Bundle manual para productos aptos con necesidad de rotación rápida.",
+      "productSkus": [
+        "MANZANA-ROJA-LB"
+      ],
+      "bundleType": "2x1",
+      "visibleToCustomer": true,
+      "requiresExplicitOptIn": true,
+      "source": "manual_poc_bundle"
+    },
+    {
+      "bundleId": "BND-SIR-PAN-3X1",
+      "storeId": "SIR-001",
+      "name": "3x1 Panadería del día",
+      "description": "Bundle manual para panadería apta del día.",
+      "productSkus": [
+        "PAN-AGUA-FAM",
+        "PAN-SOBAO-FAM"
+      ],
+      "bundleType": "3x1",
+      "visibleToCustomer": true,
+      "requiresExplicitOptIn": true,
+      "source": "manual_poc_bundle"
+    },
+    {
+      "bundleId": "BND-APZ-CENA-HOY",
+      "storeId": "APZ-001",
+      "name": "Cena rápida de hoy",
+      "description": "Combo manual con comida preparada apta para consumo el mismo día.",
+      "productSkus": [
+        "COMBO-CENA-PREP",
+        "AGUA-PLANETA-AZUL-1GL"
+      ],
+      "bundleType": "fixed_discount",
+      "discountPercent": 40,
+      "visibleToCustomer": true,
+      "requiresExplicitOptIn": true,
+      "source": "manual_poc_bundle"
+    }
+  ],
+  "assistanceRequests": [],
+  "products": [
+    {
+      "sku": "WALA-AZUCAR-5LB",
+      "name": "Azúcar crema Wala 5 lb",
+      "brand": "Wala",
+      "category": "Despensa",
+      "subcategory": "Azúcar",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "desayuno",
+          "comida_semanal"
+        ],
+        "tags": [
+          "economico",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Azúcar crema Wala 5 lb"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 151,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Azúcar",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 157,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Azúcar",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "ZERCA-MAIZ-425G",
+      "name": "Maíz dulce Zerca 425 g",
+      "brand": "Zerca",
+      "category": "Despensa",
+      "subcategory": "Conservas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal"
+        ],
+        "tags": [
+          "economico",
+          "enlatado",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Maíz dulce Zerca 425 g"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 53,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Conservas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 55,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Conservas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "WALA-ATUN-170G",
+      "name": "Atún en trozos Wala agua 170 g",
+      "brand": "Wala",
+      "category": "Despensa",
+      "subcategory": "Conservas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal",
+          "lonchera_escolar"
+        ],
+        "tags": [
+          "proteina",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Atún en trozos Wala agua 170 g"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 94,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Conservas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 98,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Conservas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "PIMCO-ARROZ-10LB",
+      "name": "Arroz Pimco Selecto 10 lb",
+      "brand": "Pimco",
+      "category": "Despensa",
+      "subcategory": "Arroz y granos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal",
+          "emergencia"
+        ],
+        "tags": [
+          "basico",
+          "familia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Arroz Pimco Selecto 10 lb"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 427,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Arroz y granos",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 445,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Arroz y granos",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "BISONO-ARROZ-5LB",
+      "name": "Arroz Selecto Enriquecido Bisonó 5 lb",
+      "brand": "Bisonó",
+      "category": "Despensa",
+      "subcategory": "Arroz y granos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal",
+          "emergencia"
+        ],
+        "tags": [
+          "basico"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Arroz Selecto Enriquecido Bisonó 5 lb"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 216,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Arroz y granos",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 225,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Arroz y granos",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "RICA-LECHE-VAQUITA-1L",
+      "name": "Leche Rica La Vaquita 1 lt",
+      "brand": "Rica",
+      "category": "Lácteos y huevos",
+      "subcategory": "Leche líquida",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_dairy",
+        "estimatedShelfLifeDays": 7,
+        "basketTypes": [
+          "desayuno",
+          "lonchera_escolar",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "lacteo",
+          "desayuno"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "leche"
+        ],
+        "imageHint": "Imagen de referencia del producto: Leche Rica La Vaquita 1 lt"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 66,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Leche líquida",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-22",
+            "daysRemaining": 3,
+            "discountPercent": 30,
+            "rescuePrice": 46.2,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 69,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Leche líquida",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-24",
+            "daysRemaining": 5
+          }
+        }
+      }
+    },
+    {
+      "sku": "RICA-EVAPORADA-350ML",
+      "name": "Leche evaporada Rica UHT 350 ml",
+      "brand": "Rica",
+      "category": "Lácteos y huevos",
+      "subcategory": "Leches enlatadas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "desayuno"
+        ],
+        "tags": [
+          "lacteo"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "leche"
+        ],
+        "imageHint": "Imagen de referencia del producto: Leche evaporada Rica UHT 350 ml"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 58,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Leches enlatadas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 60,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Leches enlatadas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "RICA-LECHE-POLVO-1500G",
+      "name": "Leche en polvo Rica funda 1500 g",
+      "brand": "Rica",
+      "category": "Lácteos y huevos",
+      "subcategory": "Leche en polvo",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "desayuno",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "lacteo",
+          "familia"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "leche"
+        ],
+        "imageHint": "Imagen de referencia del producto: Leche en polvo Rica funda 1500 g"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 825,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Leche en polvo",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 859,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Leche en polvo",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "WALA-CEREAL-500G",
+      "name": "Cereal aros de frutas Wala 500 g",
+      "brand": "Wala",
+      "category": "Despensa",
+      "subcategory": "Cereales",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "desayuno",
+          "lonchera_escolar"
+        ],
+        "tags": [
+          "niños",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Cereal aros de frutas Wala 500 g"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 120,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Cereales",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 125,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Cereales",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "ZERCA-CEREAL-1KG",
+      "name": "Cereal con azúcar Zerca 1 kg",
+      "brand": "Zerca",
+      "category": "Despensa",
+      "subcategory": "Cereales",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "desayuno",
+          "lonchera_escolar"
+        ],
+        "tags": [
+          "economico",
+          "familia",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Cereal con azúcar Zerca 1 kg"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 153,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Cereales",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 159,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Cereales",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "ZERCA-PAPEL-TOALLA-136",
+      "name": "Papel toalla Zerca 136 hojas",
+      "brand": "Zerca",
+      "category": "Limpieza y desechables",
+      "subcategory": "Desechables",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene",
+          "compra_basica"
+        ],
+        "tags": [
+          "hogar",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Papel toalla Zerca 136 hojas"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 67,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Desechables",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 70,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Desechables",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "WALA-PAPEL-HIG-12",
+      "name": "Papel higiénico Wala 12 un",
+      "brand": "Wala",
+      "category": "Limpieza y desechables",
+      "subcategory": "Papel higiénico",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene",
+          "compra_basica",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "hogar",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Papel higiénico Wala 12 un"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 192,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Papel higiénico",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 200,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Papel higiénico",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "ZERCA-PAPEL-HIG-4",
+      "name": "Papel higiénico Zerca 4 rollos",
+      "brand": "Zerca",
+      "category": "Limpieza y desechables",
+      "subcategory": "Papel higiénico",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene",
+          "compra_basica"
+        ],
+        "tags": [
+          "economico",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Papel higiénico Zerca 4 rollos"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 69,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Papel higiénico",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 72,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Papel higiénico",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "ZERCA-DETERGENTE-1GL",
+      "name": "Detergente líquido regular Zerca 1 galón",
+      "brand": "Zerca",
+      "category": "Limpieza y desechables",
+      "subcategory": "Cuidado de la ropa",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene",
+          "compra_basica"
+        ],
+        "tags": [
+          "limpieza",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Detergente líquido regular Zerca 1 galón"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 210,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado de la ropa",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 219,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado de la ropa",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "WALA-CUABA-3L",
+      "name": "Jabón de cuaba líquido Wala 3 L",
+      "brand": "Wala",
+      "category": "Limpieza y desechables",
+      "subcategory": "Cuidado de la ropa",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene"
+        ],
+        "tags": [
+          "limpieza",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Jabón de cuaba líquido Wala 3 L"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 211,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado de la ropa",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 220,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado de la ropa",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "WALA-CLORO-1GL",
+      "name": "Cloro Wala 1 galón",
+      "brand": "Wala",
+      "category": "Limpieza y desechables",
+      "subcategory": "Limpieza del hogar",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene",
+          "emergencia"
+        ],
+        "tags": [
+          "limpieza",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Cloro Wala 1 galón"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 91,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Limpieza del hogar",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 95,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Limpieza del hogar",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "ZERCA-LAVAPLATOS-1GL",
+      "name": "Lavaplatos limón Zerca 1 galón",
+      "brand": "Zerca",
+      "category": "Limpieza y desechables",
+      "subcategory": "Limpieza del hogar",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene"
+        ],
+        "tags": [
+          "limpieza",
+          "marca_propia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Lavaplatos limón Zerca 1 galón"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 219,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Limpieza del hogar",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 228,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Limpieza del hogar",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "WALA-CAMARON-16OZ",
+      "name": "Cola de camarón 51/60 Wala 16 oz",
+      "brand": "Wala",
+      "category": "Carnes y pescados",
+      "subcategory": "Pescados y mariscos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "raw_meat_fish",
+        "estimatedShelfLifeDays": 3,
+        "basketTypes": [
+          "comida_semanal"
+        ],
+        "tags": [
+          "proteina",
+          "mariscos"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "mariscos"
+        ],
+        "imageHint": "Imagen de referencia del producto: Cola de camarón 51/60 Wala 16 oz"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 298,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Pescados y mariscos",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 149.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 310,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Pescados y mariscos",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-21",
+            "daysRemaining": 2,
+            "discountPercent": 30,
+            "rescuePrice": 217.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "ZERCA-BASA-32OZ",
+      "name": "Filete de basa Zerca 32 oz",
+      "brand": "Zerca",
+      "category": "Carnes y pescados",
+      "subcategory": "Pescados y mariscos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": true,
+      "sourceNote": "sirena_public_listing",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "raw_meat_fish",
+        "estimatedShelfLifeDays": 3,
+        "basketTypes": [
+          "comida_semanal"
+        ],
+        "tags": [
+          "proteina",
+          "economico"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "pescado"
+        ],
+        "imageHint": "Imagen de referencia del producto: Filete de basa Zerca 32 oz"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 245,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Pescados y mariscos",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-19",
+            "daysRemaining": 0,
+            "discountPercent": 75,
+            "rescuePrice": 61.25,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 255,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Pescados y mariscos",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 127.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "BALDOM-SAZON-16OZ",
+      "name": "Sazón líquido Baldom 16 oz",
+      "brand": "Baldom",
+      "category": "Despensa",
+      "subcategory": "Sazones",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal"
+        ],
+        "tags": [
+          "dominicano"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Sazón líquido Baldom 16 oz"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 91,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Sazones",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 95,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Sazones",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "BALDOM-SALSA-TOMATE-8OZ",
+      "name": "Salsa de tomate Baldom 8 oz",
+      "brand": "Baldom",
+      "category": "Despensa",
+      "subcategory": "Salsas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal"
+        ],
+        "tags": [
+          "dominicano"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Salsa de tomate Baldom 8 oz"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 43,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Salsas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 45,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Salsas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "VICTORINA-HABICHUELAS-15OZ",
+      "name": "Habichuelas rojas Victorina 15 oz",
+      "brand": "Victorina",
+      "category": "Despensa",
+      "subcategory": "Conservas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal"
+        ],
+        "tags": [
+          "enlatado",
+          "dominicano"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Habichuelas rojas Victorina 15 oz"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 75,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Conservas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 78,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Conservas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "KINDU-ACEITE-128OZ",
+      "name": "Aceite vegetal Kindu 128 oz",
+      "brand": "Kindu",
+      "category": "Despensa",
+      "subcategory": "Aceites",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal"
+        ],
+        "tags": [
+          "basico"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Aceite vegetal Kindu 128 oz"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 379,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Aceites",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 395,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Aceites",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "MERCASID-PASTA-400G",
+      "name": "Pasta alimenticia Milano 400 g",
+      "brand": "Milano",
+      "category": "Despensa",
+      "subcategory": "Pastas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal",
+          "emergencia"
+        ],
+        "tags": [
+          "economico"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Pasta alimenticia Milano 400 g"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 46,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Pastas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 48,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Pastas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "GUARINA-GALLETAS-PAQ",
+      "name": "Galletas Guarina paquete familiar",
+      "brand": "Guarina",
+      "category": "Despensa",
+      "subcategory": "Galletas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "lonchera_escolar",
+          "desayuno"
+        ],
+        "tags": [
+          "niños",
+          "snack"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "gluten"
+        ],
+        "imageHint": "Imagen de referencia del producto: Galletas Guarina paquete familiar"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 85,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Galletas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 89,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Galletas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "INDUVECA-SALAMI-1LB",
+      "name": "Salami Induveca 1 lb",
+      "brand": "Induveca",
+      "category": "Carnes y pescados",
+      "subcategory": "Embutidos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_dairy",
+        "estimatedShelfLifeDays": 7,
+        "basketTypes": [
+          "desayuno",
+          "comida_semanal"
+        ],
+        "tags": [
+          "proteina"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Salami Induveca 1 lb"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 226,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Embutidos",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-23",
+            "daysRemaining": 4,
+            "discountPercent": 30,
+            "rescuePrice": 158.2,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 235,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Embutidos",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-25",
+            "daysRemaining": 6
+          }
+        }
+      }
+    },
+    {
+      "sku": "SOSUA-QUESO-BARRA-1LB",
+      "name": "Queso de freír Sosúa 1 lb",
+      "brand": "Sosúa",
+      "category": "Lácteos y huevos",
+      "subcategory": "Quesos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_dairy",
+        "estimatedShelfLifeDays": 7,
+        "basketTypes": [
+          "desayuno",
+          "comida_semanal"
+        ],
+        "tags": [
+          "lacteo",
+          "proteina"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "leche"
+        ],
+        "imageHint": "Imagen de referencia del producto: Queso de freír Sosúa 1 lb"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 274,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Quesos",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 137.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 285,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Quesos",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-22",
+            "daysRemaining": 3,
+            "discountPercent": 30,
+            "rescuePrice": 199.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "CIBAO-YOGURT-1L",
+      "name": "Yogurt natural Cibao 1 lt",
+      "brand": "Cibao",
+      "category": "Lácteos y huevos",
+      "subcategory": "Yogurt",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_dairy",
+        "estimatedShelfLifeDays": 7,
+        "basketTypes": [
+          "desayuno",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "lacteo"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "leche"
+        ],
+        "imageHint": "Imagen de referencia del producto: Yogurt natural Cibao 1 lt"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 139,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Yogurt",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-21",
+            "daysRemaining": 2,
+            "discountPercent": 50,
+            "rescuePrice": 69.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 145,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Yogurt",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-23",
+            "daysRemaining": 4,
+            "discountPercent": 30,
+            "rescuePrice": 101.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "HUEVOS-12",
+      "name": "Huevos frescos cartón 12 unidades",
+      "brand": "Granja local",
+      "category": "Lácteos y huevos",
+      "subcategory": "Huevos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_dairy",
+        "estimatedShelfLifeDays": 7,
+        "basketTypes": [
+          "desayuno",
+          "compra_basica",
+          "comida_semanal"
+        ],
+        "tags": [
+          "proteina",
+          "basico"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "huevo"
+        ],
+        "imageHint": "Imagen de referencia del producto: Huevos frescos cartón 12 unidades"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 168,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Huevos",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-26",
+            "daysRemaining": 7
+          }
+        },
+        "SIR-001": {
+          "price": 175,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Huevos",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-27",
+            "daysRemaining": 8
+          }
+        }
+      }
+    },
+    {
+      "sku": "POLLO-ENTERO-LB",
+      "name": "Pollo entero fresco por libra",
+      "brand": "Granja local",
+      "category": "Carnes y pescados",
+      "subcategory": "Pollo",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "raw_meat_fish",
+        "estimatedShelfLifeDays": 3,
+        "basketTypes": [
+          "comida_semanal",
+          "compra_basica"
+        ],
+        "tags": [
+          "proteina",
+          "fresco"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Pollo entero fresco por libra"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 91,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Pollo",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 45.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 95,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Pollo",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-21",
+            "daysRemaining": 2,
+            "discountPercent": 30,
+            "rescuePrice": 66.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "RES-MOLIDA-LB",
+      "name": "Carne molida de res por libra",
+      "brand": "Selección local",
+      "category": "Carnes y pescados",
+      "subcategory": "Res",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "raw_meat_fish",
+        "estimatedShelfLifeDays": 3,
+        "basketTypes": [
+          "comida_semanal"
+        ],
+        "tags": [
+          "proteina",
+          "fresco"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Carne molida de res por libra"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 202,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Res",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-19",
+            "daysRemaining": 0,
+            "discountPercent": 75,
+            "rescuePrice": 50.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 210,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z05",
+          "aisle": "Pasillo 05",
+          "shelf": "Res",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 105.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "MANZANA-ROJA-LB",
+      "name": "Manzana roja por libra",
+      "brand": "Importada",
+      "category": "Frutas y vegetales",
+      "subcategory": "Frutas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_produce",
+        "estimatedShelfLifeDays": 10,
+        "basketTypes": [
+          "lonchera_escolar",
+          "desayuno",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "fruta"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Manzana roja por libra"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 94,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Frutas",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-23",
+            "daysRemaining": 4,
+            "discountPercent": 30,
+            "rescuePrice": 65.8,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 98,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Frutas",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-25",
+            "daysRemaining": 6
+          }
+        }
+      }
+    },
+    {
+      "sku": "GUINEO-UN",
+      "name": "Guineo maduro unidad",
+      "brand": "Local",
+      "category": "Frutas y vegetales",
+      "subcategory": "Frutas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_produce",
+        "estimatedShelfLifeDays": 5,
+        "basketTypes": [
+          "desayuno",
+          "lonchera_escolar",
+          "compra_basica"
+        ],
+        "tags": [
+          "fruta",
+          "economico"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Guineo maduro unidad"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 12,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Frutas",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 6.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 12,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Frutas",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-21",
+            "daysRemaining": 2,
+            "discountPercent": 50,
+            "rescuePrice": 6.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "PLATANO-UN",
+      "name": "Plátano verde unidad",
+      "brand": "Local",
+      "category": "Frutas y vegetales",
+      "subcategory": "Víveres",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_produce",
+        "estimatedShelfLifeDays": 10,
+        "basketTypes": [
+          "compra_basica",
+          "comida_semanal"
+        ],
+        "tags": [
+          "dominicano",
+          "basico"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Plátano verde unidad"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 23,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Víveres",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-26",
+            "daysRemaining": 7
+          }
+        },
+        "SIR-001": {
+          "price": 24,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Víveres",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-26",
+            "daysRemaining": 7
+          }
+        }
+      }
+    },
+    {
+      "sku": "TOMATE-LB",
+      "name": "Tomate ensalada por libra",
+      "brand": "Local",
+      "category": "Frutas y vegetales",
+      "subcategory": "Vegetales",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_produce",
+        "estimatedShelfLifeDays": 5,
+        "basketTypes": [
+          "comida_semanal",
+          "compra_basica"
+        ],
+        "tags": [
+          "vegetal"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Tomate ensalada por libra"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 53,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Vegetales",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-21",
+            "daysRemaining": 2,
+            "discountPercent": 50,
+            "rescuePrice": 26.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 55,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Vegetales",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-22",
+            "daysRemaining": 3,
+            "discountPercent": 30,
+            "rescuePrice": 38.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "CEBOLLA-ROJA-LB",
+      "name": "Cebolla roja por libra",
+      "brand": "Local",
+      "category": "Frutas y vegetales",
+      "subcategory": "Vegetales",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_produce",
+        "estimatedShelfLifeDays": 10,
+        "basketTypes": [
+          "comida_semanal",
+          "compra_basica"
+        ],
+        "tags": [
+          "vegetal",
+          "basico"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Cebolla roja por libra"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 60,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Vegetales",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-27",
+            "daysRemaining": 8
+          }
+        },
+        "SIR-001": {
+          "price": 62,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Vegetales",
+          "promo": null,
+          "rescue": {
+            "eligible": false,
+            "expiresOn": "2026-08-27",
+            "daysRemaining": 8
+          }
+        }
+      }
+    },
+    {
+      "sku": "LECHUGA-UN",
+      "name": "Lechuga repollada unidad",
+      "brand": "Local",
+      "category": "Frutas y vegetales",
+      "subcategory": "Vegetales",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "fresh_produce",
+        "estimatedShelfLifeDays": 5,
+        "basketTypes": [
+          "comida_semanal",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "vegetal",
+          "fresco"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Lechuga repollada unidad"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 72,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Vegetales",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 36.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 75,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z04",
+          "aisle": "Pasillo 04",
+          "shelf": "Vegetales",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-21",
+            "daysRemaining": 2,
+            "discountPercent": 50,
+            "rescuePrice": 37.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "PAN-AGUA-FAM",
+      "name": "Pan de agua paquete familiar",
+      "brand": "Buen Horno",
+      "category": "Panadería",
+      "subcategory": "Pan fresco",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "bakery",
+        "estimatedShelfLifeDays": 2,
+        "basketTypes": [
+          "desayuno",
+          "compra_basica"
+        ],
+        "tags": [
+          "panaderia",
+          "familia"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "gluten"
+        ],
+        "imageHint": "Imagen de referencia del producto: Pan de agua paquete familiar"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 91,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Pan fresco",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-19",
+            "daysRemaining": 0,
+            "discountPercent": 75,
+            "rescuePrice": 22.75,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 95,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Pan fresco",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 47.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "PAN-SOBAO-FAM",
+      "name": "Pan sobao paquete familiar",
+      "brand": "Buen Horno",
+      "category": "Panadería",
+      "subcategory": "Pan fresco",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "bakery",
+        "estimatedShelfLifeDays": 2,
+        "basketTypes": [
+          "desayuno",
+          "lonchera_escolar"
+        ],
+        "tags": [
+          "panaderia"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "gluten"
+        ],
+        "imageHint": "Imagen de referencia del producto: Pan sobao paquete familiar"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 120,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Pan fresco",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 60.0,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 125,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Pan fresco",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-20",
+            "daysRemaining": 1,
+            "discountPercent": 50,
+            "rescuePrice": 62.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "COMBO-CENA-PREP",
+      "name": "Combo cena preparada del día",
+      "brand": "Cocina Sirena",
+      "category": "Comida preparada",
+      "subcategory": "Comida del día",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "prepared_food",
+        "estimatedShelfLifeDays": 1,
+        "basketTypes": [
+          "emergencia",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "preparado",
+          "rapido"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Combo cena preparada del día"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 235,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Comida del día",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-19",
+            "daysRemaining": 0,
+            "discountPercent": 75,
+            "rescuePrice": 58.75,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 245,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Comida del día",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-19",
+            "daysRemaining": 0,
+            "discountPercent": 75,
+            "rescuePrice": 61.25,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "ENSALADA-RUSA-12OZ",
+      "name": "Ensalada rusa 12 oz",
+      "brand": "Cocina Sirena",
+      "category": "Comida preparada",
+      "subcategory": "Ensaladas preparadas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": true,
+        "perishableClass": "prepared_food",
+        "estimatedShelfLifeDays": 1,
+        "basketTypes": [
+          "emergencia",
+          "comida_semanal"
+        ],
+        "tags": [
+          "preparado"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "huevo"
+        ],
+        "imageHint": "Imagen de referencia del producto: Ensalada rusa 12 oz"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 130,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Ensaladas preparadas",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-19",
+            "daysRemaining": 0,
+            "discountPercent": 75,
+            "rescuePrice": 32.5,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        },
+        "SIR-001": {
+          "price": 135,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z07",
+          "aisle": "Pasillo 07",
+          "shelf": "Ensaladas preparadas",
+          "promo": null,
+          "rescue": {
+            "eligible": true,
+            "expiresOn": "2026-08-19",
+            "daysRemaining": 0,
+            "discountPercent": 75,
+            "rescuePrice": 33.75,
+            "label": "Oferta de Rescate",
+            "customerMessage": "Producto apto con descuento especial para consumo rápido.",
+            "requiresExplicitOptIn": true
+          }
+        }
+      }
+    },
+    {
+      "sku": "JUGO-RICA-NARANJA-1L",
+      "name": "Jugo Rica naranja 1 lt",
+      "brand": "Rica",
+      "category": "Bebidas",
+      "subcategory": "Jugos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "desayuno",
+          "lonchera_escolar"
+        ],
+        "tags": [
+          "bebida"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Jugo Rica naranja 1 lt"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 91,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Jugos",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 95,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z03",
+          "aisle": "Pasillo 03",
+          "shelf": "Jugos",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "AGUA-PLANETA-AZUL-1GL",
+      "name": "Agua Planeta Azul 1 galón",
+      "brand": "Planeta Azul",
+      "category": "Bebidas",
+      "subcategory": "Agua",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "emergencia"
+        ],
+        "tags": [
+          "basico",
+          "emergencia"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Agua Planeta Azul 1 galón"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 62,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Agua",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 65,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Agua",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "CAFE-SANTO-DOMINGO-1LB",
+      "name": "Café Santo Domingo molido 1 lb",
+      "brand": "Santo Domingo",
+      "category": "Despensa",
+      "subcategory": "Café",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "desayuno",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "dominicano"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Café Santo Domingo molido 1 lb"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 274,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Café",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 285,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Café",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "AVENA-QUAKER-400G",
+      "name": "Avena integral 400 g",
+      "brand": "Quaker",
+      "category": "Despensa",
+      "subcategory": "Avenas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "desayuno",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "desayuno",
+          "saludable"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Avena integral 400 g"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 120,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Avenas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 125,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Avenas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "PASTA-DENTAL-FARMACIA",
+      "name": "Pasta dental familiar 100 ml",
+      "brand": "Colgate",
+      "category": "Higiene personal",
+      "subcategory": "Cuidado oral",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene",
+          "adulto_mayor"
+        ],
+        "tags": [
+          "higiene"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Pasta dental familiar 100 ml"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 120,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado oral",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 125,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado oral",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "JABON-BAÑO-3PACK",
+      "name": "Jabón de baño paquete 3 unidades",
+      "brand": "Protex",
+      "category": "Higiene personal",
+      "subcategory": "Jabones",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene",
+          "compra_basica"
+        ],
+        "tags": [
+          "higiene"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Jabón de baño paquete 3 unidades"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 178,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Jabones",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 185,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Jabones",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "PAÑALES-MEDIANO-20",
+      "name": "Pañales medianos 20 unidades",
+      "brand": "Huggies",
+      "category": "Higiene personal",
+      "subcategory": "Bebé",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "emergencia",
+          "higiene"
+        ],
+        "tags": [
+          "bebé"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Pañales medianos 20 unidades"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 408,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Bebé",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 425,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Bebé",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "DETERGENTE-POLVO-1KG",
+      "name": "Detergente en polvo 1 kg",
+      "brand": "Ariel",
+      "category": "Limpieza y desechables",
+      "subcategory": "Cuidado de la ropa",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "higiene"
+        ],
+        "tags": [
+          "limpieza"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Detergente en polvo 1 kg"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 206,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado de la ropa",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 215,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z06",
+          "aisle": "Pasillo 06",
+          "shelf": "Cuidado de la ropa",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "GALLETAS-SALADAS-PAQ",
+      "name": "Galletas saladas paquete",
+      "brand": "Hatuey",
+      "category": "Despensa",
+      "subcategory": "Galletas",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "lonchera_escolar",
+          "emergencia"
+        ],
+        "tags": [
+          "snack"
+        ],
+        "restrictions": [],
+        "allergens": [
+          "gluten"
+        ],
+        "imageHint": "Imagen de referencia del producto: Galletas saladas paquete"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 62,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Galletas",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 65,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Galletas",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    },
+    {
+      "sku": "SAL-MOLIDA-1LB",
+      "name": "Sal molida 1 lb",
+      "brand": "Salanque",
+      "category": "Despensa",
+      "subcategory": "Condimentos",
+      "dominicanBrand": true,
+      "grupoRamosBrand": false,
+      "sourceNote": "approx_poc",
+      "attributes": {
+        "perishable": false,
+        "perishableClass": null,
+        "estimatedShelfLifeDays": null,
+        "basketTypes": [
+          "compra_basica",
+          "emergencia"
+        ],
+        "tags": [
+          "basico"
+        ],
+        "restrictions": [],
+        "allergens": [],
+        "imageHint": "Imagen de referencia del producto: Sal molida 1 lb"
+      },
+      "stores": {
+        "APZ-001": {
+          "price": 31,
+          "stock": 35,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Condimentos",
+          "promo": null,
+          "rescue": null
+        },
+        "SIR-001": {
+          "price": 32,
+          "stock": 55,
+          "available": true,
+          "zoneId": "Z02",
+          "aisle": "Pasillo 02",
+          "shelf": "Condimentos",
+          "promo": null,
+          "rescue": null
+        }
+      }
+    }
+  ]
+}
