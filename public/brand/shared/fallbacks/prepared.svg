@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Comida preparada">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff9e7"/><stop offset="1" stop-color="#ffe49a"/></linearGradient></defs>
+  <rect width="480" height="480" rx="48" fill="url(#g)"/>
+  <path d="M92 235h296c-7 99-62 160-148 160S99 334 92 235Z" fill="#fff" stroke="#184d72" stroke-width="12"/>
+  <path d="M110 236c25-58 74-93 130-93s105 35 130 93" fill="#ffcf2d"/>
+  <circle cx="183" cy="211" r="28" fill="#2a9b50"/><circle cx="248" cy="186" r="30" fill="#e1534a"/><circle cx="307" cy="218" r="27" fill="#ec8d2c"/>
+  <path d="M142 397h196" stroke="#184d72" stroke-width="14" stroke-linecap="round"/>
+</svg>

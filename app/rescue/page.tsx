@@ -1,48 +1,66 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import AppShell from "@/components/AppShell";
-import StepNav from "@/components/StepNav";
 import Modal from "@/components/Modal";
-import { formatMoney } from "@/lib/money";
-import { getRescueOffers, getManualBundles, calculateBundlePrice, addRescueItemToBasket, addBundleToBasket, type RescueOffer } from "@/lib/rescue";
-import { useBloomStore } from "@/store/useBloomStore";
-import { t } from "@/lib/i18n";
+import RescueBundleCard from "@/components/RescueBundleCard";
+import RescueOfferCard from "@/components/RescueOfferCard";
+import StepNav from "@/components/StepNav";
 import { translateCategory } from "@/lib/categoryNames";
-import type { Language } from "@/types";
+import { t } from "@/lib/i18n";
+import { getStoreProduct } from "@/lib/products";
+import {
+  addBundleToBasket,
+  addRescueItemToBasket,
+  calculateBundlePrice,
+  getManualBundles,
+  getRescueOffers,
+  type RescueOffer,
+} from "@/lib/rescue";
+import { useBloomStore } from "@/store/useBloomStore";
+import type { StoreProduct } from "@/types";
 
-function consumptionHint(offer: RescueOffer, language: Language): string {
-  const cls = offer.attributes.perishableClass;
-  if (language === "en") {
-    if (cls === "prepared_food") return "Recommended: eat today.";
-    if (cls === "raw_meat_fish") return "Recommended: cook within 24-48 hours.";
-    if (cls === "bakery") return "Recommended: eat within 1-2 days.";
-    if (cls === "fresh_dairy") return "Recommended: refrigerate and consume soon.";
-    if (cls === "fresh_produce") return "Recommended: eat within the next few days.";
-    return "Recommended: consume soon.";
-  }
-  if (cls === "prepared_food") return "Recomendado: consumir hoy mismo.";
-  if (cls === "raw_meat_fish") return "Recomendado: cocinar en las próximas 24-48 horas.";
-  if (cls === "bakery") return "Recomendado: consumir en 1-2 días.";
-  if (cls === "fresh_dairy") return "Recomendado: refrigerar y consumir pronto.";
-  if (cls === "fresh_produce") return "Recomendado: consumir en los próximos días.";
-  return "Recomendado: consumir pronto.";
+function FilterPill({ active, label, onClick }: { active: boolean; label: string; onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      aria-pressed={active}
+      onClick={onClick}
+      className={`shrink-0 rounded-full px-4 py-2.5 text-sm font-bold shadow-sm transition active:scale-[0.98] ${
+        active ? "bloom-btn-primary" : "bloom-btn-secondary"
+      }`}
+    >
+      {label}
+    </button>
+  );
+}
+
+function RescueMark() {
+  return (
+    <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-[var(--bloom-accent)] text-[var(--bloom-accent-text)] shadow-sm">
+      <svg viewBox="0 0 24 24" aria-hidden="true" className="h-7 w-7" fill="none" stroke="currentColor" strokeWidth="2">
+        <path d="M20 11a8 8 0 1 1-2.3-5.7" strokeLinecap="round" />
+        <path d="M20 4v7h-7" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M8.5 12.5 11 15l4.5-5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </span>
+  );
 }
 
 export default function RescuePage() {
   const router = useRouter();
-  const storeId = useBloomStore((s) => s.storeId);
-  const hasHydrated = useBloomStore((s) => s.hasHydrated);
-  const language = useBloomStore((s) => s.language);
-  const addRescueLine = useBloomStore((s) => s.addRescueLine);
-  const addBundleLines = useBloomStore((s) => s.addBundleLines);
-  const logRescueAddition = useBloomStore((s) => s.logRescueAddition);
-  const logBundleAddition = useBloomStore((s) => s.logBundleAddition);
-  const pushToast = useBloomStore((s) => s.pushToast);
-  const lines = useBloomStore((s) => s.lines);
+  const storeId = useBloomStore((state) => state.storeId);
+  const hasHydrated = useBloomStore((state) => state.hasHydrated);
+  const language = useBloomStore((state) => state.language);
+  const addRescueLine = useBloomStore((state) => state.addRescueLine);
+  const addBundleLines = useBloomStore((state) => state.addBundleLines);
+  const logRescueAddition = useBloomStore((state) => state.logRescueAddition);
+  const logBundleAddition = useBloomStore((state) => state.logBundleAddition);
+  const pushToast = useBloomStore((state) => state.pushToast);
+  const lines = useBloomStore((state) => state.lines);
 
-  const [wantsToSee, setWantsToSee] = useState<boolean | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [pendingOverBudget, setPendingOverBudget] = useState<
     { kind: "rescue"; offer: RescueOffer } | { kind: "bundle"; bundleId: string } | null
   >(null);
@@ -51,10 +69,12 @@ export default function RescuePage() {
     if (hasHydrated && !storeId) router.replace("/select-store");
   }, [hasHydrated, storeId, router]);
 
-  if (!hasHydrated || !storeId) return null;
+  const offers = useMemo(() => (storeId ? getRescueOffers(storeId) : []), [storeId]);
+  const bundles = useMemo(() => (storeId ? getManualBundles(storeId) : []), [storeId]);
+  const categories = useMemo(() => Array.from(new Set(offers.map((offer) => offer.category))), [offers]);
+  const visibleOffers = selectedCategory ? offers.filter((offer) => offer.category === selectedCategory) : offers;
 
-  const offers = getRescueOffers(storeId);
-  const bundles = getManualBundles(storeId);
+  if (!hasHydrated || !storeId) return null;
 
   function handleAddOffer(offer: RescueOffer, allowOverBudget = false) {
     const line = addRescueItemToBasket(offer, 1, language);
@@ -70,8 +90,10 @@ export default function RescuePage() {
   }
 
   function handleAddBundle(bundleId: string, allowOverBudget = false) {
-    const bundle = bundles.find((b) => b.bundleId === bundleId);
-    if (!bundle || !storeId) return;
+    if (!storeId) return;
+    const bundle = bundles.find((candidate) => candidate.bundleId === bundleId);
+    if (!bundle) return;
+
     const bundleLines = addBundleToBasket(bundle, storeId, language);
     const result = addBundleLines(bundleLines, { allowOverBudget });
     if (result.ok) {
@@ -79,6 +101,8 @@ export default function RescuePage() {
       pushToast(t("addedToCartToast", language), "success");
     } else if (result.reason === "budget") {
       setPendingOverBudget({ kind: "bundle", bundleId });
+    } else if (result.reason === "stock") {
+      pushToast(t("maxStockReached", language), "error");
     }
   }
 
@@ -89,106 +113,97 @@ export default function RescuePage() {
     setPendingOverBudget(null);
   }
 
-  if (wantsToSee === null) {
-    return (
-      <AppShell title={t("rescueTitle", language)}>
-        <div className="flex flex-1 flex-col items-center justify-center gap-6 text-center">
-          <span className="text-5xl">💚</span>
-          <p className="text-kiosk-base font-semibold">{t("rescueIntro", language)}</p>
-          <div className="flex w-full flex-col gap-3">
-            <button
-              type="button"
-              onClick={() => setWantsToSee(true)}
-              className="rounded-2xl bg-[var(--bloom-warning)] py-4 text-kiosk-base font-bold text-black"
-            >
-              {t("rescueTitle", language)} ({offers.length})
-            </button>
-            <button
-              type="button"
-              onClick={() => router.push(lines.length > 0 ? "/route" : "/basket/start")}
-              className="bloom-btn-secondary rounded-2xl py-4"
-            >
-              {t("rescueSkip", language)}
-            </button>
-          </div>
-        </div>
-        <StepNav fallbackHref="/basket/result" />
-      </AppShell>
-    );
-  }
-
   return (
     <AppShell title={t("rescueTitle", language)}>
-      <p className="bloom-card-alt rounded-xl p-3 text-sm font-medium">{t("rescueIntro", language)}</p>
+      <section className="bloom-card-alt flex items-center gap-3 rounded-[1.35rem] p-4 sm:p-5">
+        <RescueMark />
+        <div>
+          <h2 className="text-base font-extrabold sm:text-lg">{t("rescueTitle", language)}</h2>
+          <p className="mt-0.5 text-sm leading-relaxed bloom-muted">{t("rescueIntro", language)}</p>
+        </div>
+      </section>
 
-      <div className="flex flex-col gap-3 overflow-y-auto pb-4">
-        {offers.map((offer) => {
-          const alreadyAdded = lines.some((l) => l.sku === offer.sku && l.isRescue);
-          return (
-            <div key={offer.sku} className="bloom-card rounded-2xl p-4">
-              <p className="font-bold">{offer.name}</p>
-              <p className="text-sm bloom-muted">{translateCategory(offer.category, language)}</p>
-              <div className="mt-2 flex items-center gap-2">
-                <span className="text-sm line-through bloom-muted">{formatMoney(offer.price)}</span>
-                <span className="text-kiosk-base font-extrabold text-[var(--bloom-warning)]">{formatMoney(offer.rescuePrice)}</span>
-                <span className="rounded-full bg-[var(--bloom-warning)] px-2 py-0.5 text-xs font-bold text-black">
-                  -{offer.discountPercent}%
-                </span>
-              </div>
-              <p className="mt-1 text-xs bloom-muted">
-                {offer.daysRemaining} {t("rescueDaysLeft", language)} · {consumptionHint(offer, language)}
-              </p>
-              <button
-                type="button"
-                disabled={alreadyAdded}
-                onClick={() => handleAddOffer(offer)}
-                className="mt-3 w-full rounded-xl bg-[var(--bloom-warning)] py-3 text-sm font-bold text-black disabled:opacity-40"
-              >
-                {alreadyAdded ? t("bundleAlreadyAdded", language) : t("rescueAdd", language)}
-              </button>
-            </div>
-          );
-        })}
-        {offers.length === 0 && (
-          <p className="text-center bloom-muted py-6">
-            {language === "en" ? "No Rescue Offers available today." : "No hay Ofertas de Rescate disponibles hoy."}
-          </p>
-        )}
+      {categories.length > 1 && (
+        <div className="flex flex-wrap gap-2 pb-1">
+          <FilterPill active={selectedCategory === ""} label={t("allCategories", language)} onClick={() => setSelectedCategory("")} />
+          {categories.map((category) => (
+            <FilterPill
+              key={category}
+              active={selectedCategory === category}
+              label={translateCategory(category, language)}
+              onClick={() => setSelectedCategory(category)}
+            />
+          ))}
+        </div>
+      )}
 
-        {bundles.length > 0 && (
-          <div className="mt-2">
-            <p className="mb-2 text-sm font-bold uppercase tracking-wide bloom-muted">{t("bundlesTitle", language)}</p>
-            <div className="flex flex-col gap-3">
-              {bundles.map((bundle) => {
-                const { total, savings } = calculateBundlePrice(bundle, storeId);
-                const already = lines.some((l) => l.bundleId === bundle.bundleId);
-                return (
-                  <div key={bundle.bundleId} className="bloom-card rounded-2xl border-blue-300 p-4">
-                    <p className="font-bold">{bundle.name}</p>
-                    <p className="text-sm bloom-muted">{bundle.description}</p>
-                    <div className="mt-2 flex items-center gap-2">
-                      <span className="text-kiosk-base font-extrabold">{formatMoney(total)}</span>
-                      {savings > 0 && (
-                        <span className="text-xs font-semibold text-blue-600">
-                          {language === "en" ? `Save ${formatMoney(savings)}` : `Ahorras ${formatMoney(savings)}`}
-                        </span>
-                      )}
-                    </div>
-                    <button
-                      type="button"
-                      disabled={already}
-                      onClick={() => handleAddBundle(bundle.bundleId)}
-                      className="mt-3 w-full rounded-xl bg-blue-600 py-3 text-sm font-bold text-white disabled:opacity-40"
-                    >
-                      {already ? t("bundleAlreadyAdded", language) : t("addBundle", language)}
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
+      <section aria-labelledby="rescue-products-heading" className="space-y-3">
+        <div className="flex items-end justify-between gap-3">
+          <div>
+            <h2 id="rescue-products-heading" className="text-lg font-extrabold">
+              {selectedCategory ? translateCategory(selectedCategory, language) : t("rescueTitle", language)}
+            </h2>
+            <p className="text-sm bloom-muted">
+              {language === "en"
+                ? `${visibleOffers.length} ${visibleOffers.length === 1 ? "offer" : "offers"}`
+                : `${visibleOffers.length} ${visibleOffers.length === 1 ? "oferta" : "ofertas"}`}
+            </p>
+          </div>
+        </div>
+
+        {visibleOffers.length > 0 ? (
+          <div className="product-grid">
+            {visibleOffers.map((offer) => (
+              <RescueOfferCard
+                key={offer.sku}
+                offer={offer}
+                language={language}
+                alreadyAdded={lines.some((line) => line.sku === offer.sku && line.isRescue)}
+                onAdd={() => handleAddOffer(offer)}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="bloom-card-alt flex min-h-48 items-center justify-center rounded-[1.5rem] p-8 text-center">
+            <p className="max-w-sm font-semibold bloom-muted">
+              {language === "en" ? "No Rescue Offers are available in this category today." : "No hay Ofertas de Rescate disponibles en esta categoría hoy."}
+            </p>
           </div>
         )}
-      </div>
+      </section>
+
+      {bundles.length > 0 && (
+        <section aria-labelledby="rescue-bundles-heading" className="space-y-3 pb-5 pt-2">
+          <div>
+            <h2 id="rescue-bundles-heading" className="text-lg font-extrabold">{t("bundlesTitle", language)}</h2>
+            <p className="text-sm bloom-muted">
+              {language === "en" ? "Ready-made combinations with extra savings." : "Combinaciones listas con ahorro adicional."}
+            </p>
+          </div>
+
+          <div className="bundle-grid">
+            {bundles.map((bundle) => {
+              const { total, savings } = calculateBundlePrice(bundle, storeId);
+              const products = bundle.productSkus
+                .map((sku) => getStoreProduct(storeId, sku))
+                .filter((product): product is StoreProduct => Boolean(product));
+
+              return (
+                <RescueBundleCard
+                  key={bundle.bundleId}
+                  bundle={bundle}
+                  products={products}
+                  language={language}
+                  total={total}
+                  savings={savings}
+                  alreadyAdded={lines.some((line) => line.bundleId === bundle.bundleId)}
+                  onAdd={() => handleAddBundle(bundle.bundleId)}
+                />
+              );
+            })}
+          </div>
+        </section>
+      )}
 
       <StepNav fallbackHref="/basket/result" nextHref="/route" nextDisabled={lines.length === 0} />
 
@@ -200,10 +215,10 @@ export default function RescuePage() {
         >
           <p className="mb-4 text-sm bloom-muted">{t("budgetExceededBody", language)}</p>
           <div className="flex flex-col gap-2">
-            <button type="button" onClick={confirmPendingOverBudget} className="bloom-btn-primary rounded-2xl py-3">
+            <button type="button" onClick={confirmPendingOverBudget} className="bloom-btn-primary rounded-full py-3.5">
               {t("addAnyway", language)}
             </button>
-            <button type="button" onClick={() => setPendingOverBudget(null)} className="bloom-btn-secondary rounded-2xl py-3">
+            <button type="button" onClick={() => setPendingOverBudget(null)} className="bloom-btn-secondary rounded-full py-3.5">
               {t("cancel", language)}
             </button>
           </div>

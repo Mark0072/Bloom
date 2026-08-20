@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Producto fresco">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f8ffe8"/><stop offset="1" stop-color="#dff5b8"/></linearGradient></defs>
+  <rect width="480" height="480" rx="48" fill="url(#g)"/>
+  <circle cx="240" cy="274" r="112" fill="#f8c92f"/>
+  <path d="M239 216c-18-68 19-108 86-116-4 66-37 102-86 116Z" fill="#179447"/>
+  <path d="M239 213c28-33 52-55 78-75" fill="none" stroke="#0d6e35" stroke-width="12" stroke-linecap="round"/>
+  <path d="M185 260c46 11 82 42 104 93M299 256c-37 17-62 48-76 92" fill="none" stroke="#fff" stroke-width="14" stroke-linecap="round"/>
+</svg>

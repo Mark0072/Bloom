@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Lácteo">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#f0fbff"/><stop offset="1" stop-color="#cfeef7"/></linearGradient></defs>
+  <rect width="480" height="480" rx="48" fill="url(#g)"/>
+  <path d="M184 130h112l24 72v166c0 20-16 36-36 36h-88c-20 0-36-16-36-36V202l24-72Z" fill="#fff" stroke="#137a9f" stroke-width="12"/>
+  <path d="M184 130h112v58H184z" fill="#18acd0"/>
+  <path d="M184 260h136v94H184z" fill="#ffd928"/>
+  <path d="M218 306c17-27 27-39 40-58 18 26 29 40 40 58-1 23-16 38-40 38s-39-15-40-38Z" fill="#fff"/>
+</svg>

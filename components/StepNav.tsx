@@ -33,12 +33,12 @@ export default function StepNav({ fallbackHref = "/home", showBack = true, nextH
   }
 
   return (
-    <div className="mt-auto flex gap-3 pt-4">
+    <div className="mt-auto flex w-full min-w-0 max-w-full gap-3 pt-4">
       {showBack && (
         <button
           type="button"
           onClick={handleBack}
-          className="bloom-btn-secondary flex-1 rounded-2xl py-4 text-kiosk-base active:scale-[0.98]"
+          className="bloom-btn-secondary min-w-0 flex-1 whitespace-normal rounded-2xl px-3 py-4 text-center text-kiosk-base leading-tight active:scale-[0.98]"
         >
           {t("back", language)}
         </button>
@@ -48,7 +48,7 @@ export default function StepNav({ fallbackHref = "/home", showBack = true, nextH
           type="button"
           disabled={nextDisabled}
           onClick={handleNext}
-          className="bloom-btn-primary flex-[2] rounded-2xl py-4 text-kiosk-base shadow-md active:scale-[0.98] disabled:opacity-40"
+          className="bloom-btn-primary min-w-0 flex-[2] whitespace-normal rounded-2xl px-3 py-4 text-center text-kiosk-base leading-tight shadow-md active:scale-[0.98] disabled:opacity-40"
         >
           {nextLabel ?? t("next", language)}
         </button>

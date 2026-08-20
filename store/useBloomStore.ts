@@ -57,6 +57,22 @@ function computeCartTotal(lines: BasketLine[]): number {
   return round2(lines.reduce((sum, l) => sum + l.unitPrice * l.quantity, 0));
 }
 
+function computeBasketSavings(lines: BasketLine[]): number {
+  return round2(
+    lines.reduce((sum, line) => {
+      if (line.isRescue) return sum;
+      return sum + Math.max(0, line.regularUnitPrice - line.unitPrice) * line.quantity;
+    }, 0)
+  );
+}
+
+function getSkuQuantity(lines: BasketLine[], sku: string, excludeId?: string): number {
+  return lines.reduce(
+    (sum, line) => sum + (line.sku === sku && line.id !== excludeId ? line.quantity : 0),
+    0
+  );
+}
+
 function lineIdFor(sku: string, kind: "normal" | "rescue", bundleId?: string): string {
   if (bundleId) return `${sku}::bundle::${bundleId}`;
   return `${sku}::${kind}`;
@@ -129,6 +145,63 @@ interface BloomState {
   resetFlow: () => void;
 }
 
+function basketMutationPatch(
+  lines: BasketLine[],
+  hasManualBasketEdits: boolean
+): Pick<BloomState, "lines" | "basketSavings" | "hasManualBasketEdits" | "route" | "ticket"> {
+  return {
+    lines,
+    basketSavings: computeBasketSavings(lines),
+    hasManualBasketEdits,
+    route: null,
+    ticket: null,
+  };
+}
+
+/**
+ * Keeps customer-selected lines first, then fits generated suggestions into the
+ * remaining budget and cumulative SKU stock. If protected lines already exceed
+ * the budget because the customer explicitly overrode it, none of them are removed.
+ */
+function mergeGeneratedWithProtected(
+  generated: BasketLine[],
+  protectedLines: BasketLine[],
+  storeId: StoreId,
+  budget: number
+): BasketLine[] {
+  const protectedIds = new Set(protectedLines.map((line) => line.id));
+  const usedBySku = new Map<string, number>();
+  for (const line of protectedLines) {
+    usedBySku.set(line.sku, (usedBySku.get(line.sku) ?? 0) + line.quantity);
+  }
+
+  let remainingBudget = budget > 0 ? Math.max(0, budget - computeCartTotal(protectedLines)) : Infinity;
+  const fitted: BasketLine[] = [];
+
+  for (const line of generated) {
+    if (protectedIds.has(line.id)) continue;
+
+    const product = getStoreProduct(storeId, line.sku);
+    if (!product || !product.available || product.stock <= 0) continue;
+
+    const availableStock = Math.max(0, product.stock - (usedBySku.get(line.sku) ?? 0));
+    const affordableQuantity = Number.isFinite(remainingBudget)
+      ? Math.floor((remainingBudget + 0.001) / line.unitPrice)
+      : line.quantity;
+    const quantity = Math.min(line.quantity, availableStock, affordableQuantity);
+    if (quantity <= 0) continue;
+
+    const fittedLine = quantity === line.quantity ? line : { ...line, quantity };
+    fitted.push(fittedLine);
+    usedBySku.set(line.sku, (usedBySku.get(line.sku) ?? 0) + quantity);
+    remainingBudget = Number.isFinite(remainingBudget)
+      ? round2(remainingBudget - line.unitPrice * quantity)
+      : remainingBudget;
+  }
+
+  return [...fitted, ...protectedLines];
+}
+
 const defaultBasketForm: BasketFormInput = {
   budget: 0,
   people: 1,
@@ -192,7 +265,19 @@ export const useBloomStore = create<BloomState>()(
       rescueAdditions: [],
       bundleAdditions: [],
 
-      setStore: (storeId) => set({ storeId }),
+      setStore: (storeId) =>
+        set({
+          storeId,
+          productFilters: defaultProductFilters,
+          basketForm: defaultBasketForm,
+          lines: [],
+          basketExplanations: [],
+          basketSavings: 0,
+          hasManualBasketEdits: false,
+          route: null,
+          assistance: null,
+          ticket: null,
+        }),
       setLanguage: (language) => set({ language }),
 
       setColorProfile: (colorProfile) => set({ accessibility: { ...get().accessibility, colorProfile } }),
@@ -205,21 +290,32 @@ export const useBloomStore = create<BloomState>()(
 
       setLines: (lines, explanations, savings) => {
         const state = get();
-        set({
+        if (!state.storeId) return;
+
+        const protectedLines = state.lines.filter(
+          (line) => line.isRescue || line.isBundle || line.manuallyAdded
+        );
+        const mergedLines = mergeGeneratedWithProtected(
           lines,
+          protectedLines,
+          state.storeId,
+          state.basketForm.budget
+        );
+        const mergedSavings = computeBasketSavings(mergedLines) || savings;
+        set({
+          ...basketMutationPatch(mergedLines, false),
           basketExplanations: explanations,
-          basketSavings: savings,
-          hasManualBasketEdits: false,
           generatedBaskets: [
             ...state.generatedBaskets,
             {
-              storeId: state.storeId as StoreId,
+              storeId: state.storeId,
               budget: state.basketForm.budget,
-              savings,
-              itemSkus: lines.map((l) => l.sku),
+              savings: mergedSavings,
+              itemSkus: mergedLines.map((l) => l.sku),
               createdAt: new Date().toISOString(),
             },
           ],
+          basketSavings: mergedSavings,
         });
       },
 
@@ -235,26 +331,27 @@ export const useBloomStore = create<BloomState>()(
             : [...state.basketForm.preferences, extraPreference],
         };
 
-        const result = generateBasket(form, state.storeId, state.language);
-        const resultIds = new Set(result.lines.map((l) => l.id));
-        const mergedLines = [...result.lines, ...preserved.filter((l) => !resultIds.has(l.id))];
+        const protectedTotal = computeCartTotal(preserved);
+        const generationBudget = form.budget > 0 ? Math.max(0, round2(form.budget - protectedTotal)) : 0;
+        const result = generateBasket({ ...form, budget: generationBudget }, state.storeId, state.language);
+        const mergedLines = mergeGeneratedWithProtected(result.lines, preserved, state.storeId, form.budget);
+        const mergedSavings = computeBasketSavings(mergedLines);
 
         set({
           basketForm: form,
-          lines: mergedLines,
+          ...basketMutationPatch(mergedLines, false),
           basketExplanations: result.explanations,
-          basketSavings: result.savings,
-          hasManualBasketEdits: false,
           generatedBaskets: [
             ...state.generatedBaskets,
             {
               storeId: state.storeId,
               budget: form.budget,
-              savings: result.savings,
+              savings: mergedSavings,
               itemSkus: mergedLines.map((l) => l.sku),
               createdAt: new Date().toISOString(),
             },
           ],
+          basketSavings: mergedSavings,
         });
       },
 
@@ -270,7 +367,9 @@ export const useBloomStore = create<BloomState>()(
         const existingQty = existingIdx >= 0 ? lines[existingIdx].quantity : 0;
         const requestedTotalQty = existingQty + quantity;
 
-        const cappedQty = Math.min(requestedTotalQty, product.stock);
+        const quantityInOtherVariants = getSkuQuantity(state.lines, sku, id);
+        const availableForThisLine = Math.max(0, product.stock - quantityInOtherVariants);
+        const cappedQty = Math.min(requestedTotalQty, availableForThisLine);
         if (cappedQty <= existingQty) return { ok: false, reason: "stock" };
 
         const addedQty = cappedQty - existingQty;
@@ -299,7 +398,7 @@ export const useBloomStore = create<BloomState>()(
             manuallyAdded: true,
           });
         }
-        set({ lines, hasManualBasketEdits: true });
+        set(basketMutationPatch(lines, true));
         return { ok: true, cappedQuantity: cappedQty < requestedTotalQty ? cappedQty : undefined };
       },
 
@@ -312,7 +411,8 @@ export const useBloomStore = create<BloomState>()(
         const existingIdx = state.lines.findIndex((l) => l.id === line.id);
         if (existingIdx >= 0) return { ok: false, reason: "duplicate" };
 
-        const quantity = Math.min(line.quantity, product.stock);
+        const availableForVariant = Math.max(0, product.stock - getSkuQuantity(state.lines, line.sku));
+        const quantity = Math.min(line.quantity, availableForVariant);
         if (quantity <= 0) return { ok: false, reason: "stock" };
 
         const cost = round2(line.unitPrice * quantity);
@@ -322,7 +422,7 @@ export const useBloomStore = create<BloomState>()(
           if (round2(currentTotal + cost) > budget) return { ok: false, reason: "budget" };
         }
 
-        set({ lines: [...state.lines, { ...line, quantity }], hasManualBasketEdits: true });
+        set(basketMutationPatch([...state.lines, { ...line, quantity }], true));
         return { ok: true };
       },
 
@@ -334,6 +434,18 @@ export const useBloomStore = create<BloomState>()(
           return { ok: false, reason: "duplicate" };
         }
 
+        if (!state.storeId) return { ok: false, reason: "not_found" };
+        const requestedBySku = new Map<string, number>();
+        for (const line of bundleLines) {
+          const product = getStoreProduct(state.storeId, line.sku);
+          if (!product || !product.available) return { ok: false, reason: "not_found" };
+          const requested = (requestedBySku.get(line.sku) ?? 0) + line.quantity;
+          requestedBySku.set(line.sku, requested);
+          if (getSkuQuantity(state.lines, line.sku) + requested > product.stock) {
+            return { ok: false, reason: "stock" };
+          }
+        }
+
         const cost = round2(bundleLines.reduce((sum, l) => sum + l.unitPrice * l.quantity, 0));
         const budget = state.basketForm.budget;
         if (budget > 0 && !opts?.allowOverBudget) {
@@ -341,7 +453,7 @@ export const useBloomStore = create<BloomState>()(
           if (round2(currentTotal + cost) > budget) return { ok: false, reason: "budget" };
         }
 
-        set({ lines: [...state.lines, ...bundleLines], hasManualBasketEdits: true });
+        set(basketMutationPatch([...state.lines, ...bundleLines], true));
         return { ok: true };
       },
 
@@ -352,7 +464,9 @@ export const useBloomStore = create<BloomState>()(
         const product = getStoreProduct(state.storeId, line.sku);
         if (!product) return { ok: false, reason: "not_found" };
 
-        if (line.quantity + 1 > product.stock) return { ok: false, reason: "stock" };
+        if (getSkuQuantity(state.lines, line.sku) + 1 > product.stock) {
+          return { ok: false, reason: "stock" };
+        }
 
         const addedCost = round2(line.unitPrice);
         const budget = state.basketForm.budget;
@@ -361,10 +475,12 @@ export const useBloomStore = create<BloomState>()(
           if (round2(currentTotal + addedCost) > budget) return { ok: false, reason: "budget" };
         }
 
-        set({
-          lines: state.lines.map((l) => (l.id === id ? { ...l, quantity: l.quantity + 1 } : l)),
-          hasManualBasketEdits: true,
-        });
+        set(
+          basketMutationPatch(
+            state.lines.map((l) => (l.id === id ? { ...l, quantity: l.quantity + 1 } : l)),
+            true
+          )
+        );
         return { ok: true };
       },
 
@@ -376,10 +492,12 @@ export const useBloomStore = create<BloomState>()(
           get().removeLineById(id);
           return;
         }
-        set({
-          lines: state.lines.map((l) => (l.id === id ? { ...l, quantity: l.quantity - 1 } : l)),
-          hasManualBasketEdits: true,
-        });
+        set(
+          basketMutationPatch(
+            state.lines.map((l) => (l.id === id ? { ...l, quantity: l.quantity - 1 } : l)),
+            true
+          )
+        );
       },
 
       removeLineById: (id) => {
@@ -388,13 +506,10 @@ export const useBloomStore = create<BloomState>()(
         if (!line) return;
         // Bundles are atomic: removing one component removes the whole combo and its discount.
         if (line.isBundle && line.bundleId) {
-          set({
-            lines: state.lines.filter((l) => l.bundleId !== line.bundleId),
-            hasManualBasketEdits: true,
-          });
+          set(basketMutationPatch(state.lines.filter((l) => l.bundleId !== line.bundleId), true));
           return;
         }
-        set({ lines: state.lines.filter((l) => l.id !== id), hasManualBasketEdits: true });
+        set(basketMutationPatch(state.lines.filter((l) => l.id !== id), true));
       },
 
       logRescueAddition: (sku) => {

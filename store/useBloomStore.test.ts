@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { useBloomStore } from "@/store/useBloomStore";
 import { addBundleToBasket, addRescueItemToBasket, getManualBundles, getRescueOffers } from "@/lib/rescue";
-import type { StoreId } from "@/types";
+import type { ShoppingRoute, StoreId, Ticket } from "@/types";
 
 const STORE: StoreId = "APZ-001";
 const initialState = structuredClone(
@@ -122,5 +122,90 @@ describe("regenerateBasket preservation", () => {
 
     const idsAfter = useBloomStore.getState().lines.map((l) => l.id);
     expect(idsAfter).toContain(manualLineId);
+  });
+
+  it("reserves the protected-line cost before generating and stays within budget", () => {
+    useBloomStore.getState().setBasketForm({
+      budget: 220,
+      people: 2,
+      basketType: "comida_semanal",
+      preferences: [],
+      restrictions: [],
+      allergies: [],
+    });
+    useBloomStore.getState().addProductToCart("WALA-AZUCAR-5LB", 1);
+
+    useBloomStore.getState().regenerateBasket("ahorro_maximo");
+
+    const state = useBloomStore.getState();
+    const total = state.lines.reduce((sum, line) => sum + line.unitPrice * line.quantity, 0);
+    expect(state.lines.some((line) => line.id === "WALA-AZUCAR-5LB::normal")).toBe(true);
+    expect(total).toBeLessThanOrEqual(220);
+  });
+});
+
+describe("transaction consistency", () => {
+  function setDerivedState() {
+    const route: ShoppingRoute = { storeId: STORE, stops: [] };
+    const ticket: Ticket = {
+      ticketCode: "BLM-TEST",
+      storeId: STORE,
+      storeName: "Aprezio",
+      branchName: "Test",
+      createdAt: new Date(0).toISOString(),
+      lines: useBloomStore.getState().lines,
+      productNames: {},
+      total: 0,
+      promoSavings: 0,
+      rescueSavings: 0,
+      bundleIds: [],
+      routeSummary: [],
+      assistance: null,
+    };
+    useBloomStore.getState().setRoute(route);
+    useBloomStore.getState().setTicket(ticket);
+  }
+
+  it("invalidates route and ticket after a cart mutation", () => {
+    useBloomStore.getState().setBasketForm({ budget: 0 });
+    useBloomStore.getState().addProductToCart("SAL-MOLIDA-1LB", 1);
+    setDerivedState();
+
+    useBloomStore.getState().incrementLine("SAL-MOLIDA-1LB::normal");
+
+    expect(useBloomStore.getState().route).toBeNull();
+    expect(useBloomStore.getState().ticket).toBeNull();
+  });
+
+  it("clears the active transaction when a store is selected", () => {
+    useBloomStore.getState().setBasketForm({ budget: 500 });
+    useBloomStore.getState().addProductToCart("SAL-MOLIDA-1LB", 1);
+    setDerivedState();
+
+    useBloomStore.getState().setStore("SIR-001");
+
+    const state = useBloomStore.getState();
+    expect(state.storeId).toBe("SIR-001");
+    expect(state.basketForm.budget).toBe(0);
+    expect(state.lines).toHaveLength(0);
+    expect(state.route).toBeNull();
+    expect(state.ticket).toBeNull();
+  });
+
+  it("enforces stock cumulatively across normal and rescue variants", () => {
+    useBloomStore.getState().setBasketForm({ budget: 0 });
+    useBloomStore.getState().addProductToCart("WALA-CAMARON-16OZ", 34);
+    const offer = getRescueOffers(STORE).find((item) => item.sku === "WALA-CAMARON-16OZ");
+    expect(offer).toBeDefined();
+    useBloomStore.getState().addRescueLine(addRescueItemToBasket(offer!, 1));
+
+    const result = useBloomStore.getState().incrementLine("WALA-CAMARON-16OZ::rescue");
+    const totalQuantity = useBloomStore.getState().lines
+      .filter((line) => line.sku === "WALA-CAMARON-16OZ")
+      .reduce((sum, line) => sum + line.quantity, 0);
+
+    expect(result.ok).toBe(false);
+    expect(result.reason).toBe("stock");
+    expect(totalQuantity).toBe(35);
   });
 });

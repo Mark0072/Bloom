@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Carne">
+  <defs><linearGradient id="g" x1="0" x2="1" y2="1"><stop stop-color="#fff3ef"/><stop offset="1" stop-color="#ffd6cc"/></linearGradient></defs>
+  <rect width="480" height="480" rx="48" fill="url(#g)"/>
+  <path d="M345 154c56 47 52 135 1 187-56 57-164 62-215 12-49-48-17-111 28-155 51-50 132-88 186-44Z" fill="#d94d50"/>
+  <path d="M309 183c32 25 30 73 2 99-31 30-92 32-121 7-28-25-10-58 16-82 29-27 73-49 103-24Z" fill="#ffe2d6"/>
+  <path d="M270 207c16 12 15 34 1 47-15 14-43 15-57 3-13-12-5-27 8-39 13-13 34-23 48-11Z" fill="#fff8f4"/>
+</svg>
